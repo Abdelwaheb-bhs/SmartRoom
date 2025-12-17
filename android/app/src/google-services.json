@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "359926628650",
+    "firebase_url": "https://iotprojectiit-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "iotprojectiit",
+    "storage_bucket": "iotprojectiit.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359926628650:android:de45803a48368a4a0f5e53",
+        "android_client_info": {
+          "package_name": "com.abdoubhs.iotiit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPHugkbYFmF-tx9JPC5AoxR-jwJm_wYn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

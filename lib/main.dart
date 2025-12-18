@@ -27,6 +27,7 @@ import 'dart:typed_data';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:homeassistant/voice_agent_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -499,6 +500,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String _cameraUrl = '';
   bool _isCameraConnected = false;
   bool _isModelLoading = false;
+  final String _geminiApiKey = 'AIzaSyAAg-S8OofY0qvoS6TudUPN3u_m-VoK4fw';
+
+
   final TextEditingController _urlController = TextEditingController();
 
   @override
@@ -506,7 +510,61 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _initializeModels();
   }
-
+  Future<String> _callGeminiApi(String userQuery, String context) async {
+    if (_geminiApiKey.isEmpty || _geminiApiKey == 'YOUR_GEMINI_API_KEY_HERE') {
+      return 'Please add your Gemini API key in the code to use the AI assistant.';
+    }
+    
+    print('Using Gemini API key: ${_geminiApiKey.substring(0, 10)}...');
+    
+    final url = Uri.parse(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$_geminiApiKey'
+    );
+    
+    final requestBody = {
+      'contents': [
+        {
+          'parts': [
+            {'text': 'Context:\n$context\n\nUser Question: $userQuery'}
+          ]
+        }
+      ],
+      'generationConfig': {
+        'temperature': 0.7,
+        'topK': 40,
+        'topP': 0.95,
+        'maxOutputTokens': 1024,
+      }
+    };
+    
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(requestBody),
+    );
+    
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final text = data['candidates'][0]['content']['parts'][0]['text'];
+      return text.toString().trim();
+    } else {
+      throw Exception('Gemini API error: ${response.statusCode} - ${response.body}');
+    }
+  }
+Future<void> _testGeminiApi() async {
+  print('Testing Gemini API...');
+  print('API Key length: ${_geminiApiKey.length}');
+  print('API Key starts with: ${_geminiApiKey.substring(0, 10)}');
+  
+  try {
+    final response = await _callGeminiApi('Hello, test message', 'This is a test');
+    print('Response: $response');
+    _showMessage('Test successful: $response');
+  } catch (e) {
+    print('Test failed: $e');
+    _showMessage('Test failed: $e');
+  }
+}
   Future<void> _initializeModels() async {
     setState(() => _isModelLoading = true);
     try {
@@ -654,6 +712,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     enabled: true,
                   ),
+                  
+                  const SizedBox(height: 12),
+                  _buildActionButton(
+                  context,
+                  'Voice Assistant',
+                  Icons.mic,
+                  Colors.deepPurple,
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VoiceAgentScreen(),
+                    ),
+                  ),
+                  enabled: true,
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+  onPressed: _testGeminiApi,
+  child: const Text('Test Gemini API'),
+),
                 ],
               ),
             ),

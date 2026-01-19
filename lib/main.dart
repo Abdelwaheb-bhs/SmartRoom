@@ -1,26 +1,4 @@
-// Attendance Management App with ONNX Face Recognition
-// pubspec.yaml dependencies:
-// dependencies:
-//   flutter:
-//     sdk: flutter
-//   http: ^1.1.0
-//   firebase_core: ^2.24.2
-//   firebase_database: ^10.4.0
-//   onnxruntime: ^1.17.0
-//   image: ^4.1.3
-//   intl: ^0.18.1
-//   path_provider: ^2.1.1
-//   flutter/services
-//
-// Assets needed in pubspec.yaml:
-// flutter:
-//   assets:
-//     - assets/models/face_recognition.onnx
-//     - assets/models/face_detection.onnx
-//
-// Download models from:
-// Face Detection: https://github.com/onnx/models/tree/main/vision/body_analysis/ultraface
-// Face Recognition: https://github.com/onnx/models/tree/main/vision/body_analysis/arcface
+
 
 import 'dart:convert';
 import 'dart:typed_data';
